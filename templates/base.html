@@ -1,0 +1,323 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wander Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/newstyle.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <!--navbar-->
+    <nav>
+        <div class="user">
+            <a href="/client/viewmyprofile" style="display: flex;">
+                <div class="profile">
+                    <img src="{{ profile_instances.client.image.url }}" alt="xxxx">
+                </div>
+                <h4>{{ profile_instances.first_name }} </h4>
+            </a>
+        </div>
+
+        <!--logo and search-->
+        <div class="tab">
+            <div class="left-side">
+                <div class="logo">
+                    <img src="{% static 'img/img/icons/logo.png' %}" alt="">
+                </div>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .suggestion-item { padding: 8px; cursor: pointer; }
+        .suggestion-item:hover { background-color: #f0f0f0; }
+    </style>
+<!--                <div class="search">-->
+<!--                    <input type="text" placeholder="Search wanderConnect" name="" id="search" onfocus="displaySuggestion()">-->
+    <form method="GET" action="#">
+        <div class="search">
+            <input type="text" name="q" id="search-input" placeholder="Search by hashtag..." value="{{ request.GET.q }}">
+        </div>
+    </form>
+            </div>
+
+            <div class="suggest" id="suggestions" style="display:block">
+                </div>
+<!--                                <ul>-->
+<!--        {% for post in results %}-->
+<!--            <li>{{ post.postcontent }}</li>-->
+<!--        {% empty %}-->
+<!--            <li>No results found.</li>-->
+<!--        {% endfor %}-->
+<!--    </ul>-->
+
+
+        </div>
+
+        <!--right side-->
+        <div class="right-side">
+
+            <!--icons-->
+            <div class="user-icons">
+                <a href="/loadclient/">
+                    <div class="icon">
+                        <img src="{% static 'img/img/icons/home.svg' %}" alt="">
+                    </div>
+                </a>
+                <a href="/client/chatviewpeoples/">
+                    <div class="icon">
+                        <img src="{% static 'img/img/icons/colored-messenger.svg' %}" alt="">
+                    </div>
+                </a>
+                <a href="/">
+                    <div class="icon">
+                        <img src="{% static 'img/img/icons/logout1.png' %}" alt="">
+                    </div>
+                </a>
+                
+            </div>
+        </div>
+    </nav>
+
+
+    
+    <!--content-->
+    <div class="wrapper">
+        <div class="shortcuts">
+            <div class="first-col">
+                <div class="menu-item">
+                    <div class="item-row">
+                        <div class="icon">
+                            <img src="{% static 'img/img/icons/colored-people.svg' %}" alt="">
+                        </div>
+                        <a href="/client/viewmyconnections1"><h4>Connections</h4></a>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-row">
+                        <div class="icon">
+                            <img src="{% static 'img/img/icons/colored-messenger.svg' %}" alt="">
+                        </div>
+                        <a href="/client/chatviewpeoples/"><h4>Chats </h4></a>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-row">
+                            <img src="{% static 'img/img/icons/groups.png' %}" width="30px" height="30px" alt="">
+                        <a href="/client/viewmywandergroup"><h4>Groups </h4></a>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-row">
+                            <img src="{% static 'img/img/icons/post.png' %}" width="30px" height="30px" alt="">
+                        <a href="/client/viewmypost"><h4>Your Posts </h4></a>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-row">
+                            <img src="{% static 'img/img/icons/request.png' %}" width="30px" height="30px" alt="">
+                        <a href="/client/loadrequestpage/"><h4>Requests</h4><span class="badge">5</span> </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="second-col first-col">
+<!--                <div class="menu-item">-->
+<!--                    <div class="upper">-->
+<!--                        <h6>Groups</h6>-->
+<!--                    </div>-->
+<!--                </div>-->
+        
+<!--                <div class="menu-item">-->
+<!--                    <div class="item-row">-->
+<!--                        <div class="icon">-->
+<!--                            <img src="{% static 'img/img/stories/st-2.jpeg" alt="">-->
+<!--                        </div>-->
+<!--                        <a href="groupViewUser.html"><h4>Script house </h4></a>-->
+<!--                    </div>-->
+<!--                </div>-->
+        
+
+        
+                <div class="menu" id="more-groups" style="display: none;">
+                    <!-- loop here -->
+                    {% for i in all_groups %}
+                    <div class="menu-item">
+                        <div class="item-row">
+                            <div class="icon">
+                                <img src="{{ i.groupimage.url }}" alt="">
+                            </div>
+                            <a href="/client/viewwandergroup/{{i.id}}"><h4>{{i.groupname}}</h4></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+<!--                    <div class="menu-item">-->
+<!--                        <div class="item-row">-->
+<!--                            <div class="icon">-->
+<!--                                <img src="img/stories/st-1.jpeg" alt="">-->
+<!--                            </div>-->
+<!--                            <a href="groupViewUser.html"><h4>Bibs ui design </h4></a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="menu-item">-->
+<!--                        <div class="item-row">-->
+<!--                            <div class="icon">-->
+<!--                                <img src="img/stories/st-1.jpeg" alt="">-->
+<!--                            </div>-->
+<!--                            <a href="groupViewUser.html"><h4>Bibs ui design </h4></a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="menu-item">-->
+<!--                        <div class="item-row">-->
+<!--                            <div class="icon">-->
+<!--                                <img src="img/stories/st-1.jpeg" alt="">-->
+<!--                            </div>-->
+<!--                            <a href="groupAdminView.html"><h4>Bibs ui design </h4></a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <!-- loop ends -->
+                </div>
+        
+                <div class="menu-item" id="see-more">
+                    <div class="item-row border">
+                        <div class="icon more">
+                            <img src="{% static '/img/img/icons/arrow-down.svg' %}" alt="">
+                        </div>
+                        <a href="#" onclick="toggleMoreGroup()"><h4 id="see-more-text">groups</h4></a>
+                    </div>
+                </div>
+            </div>
+            <div class="second-col">
+                <div class="online">
+                    <h6 class="title">
+                        your connections
+                    </h6>
+        <!-- loop here -->
+                  {% for x in myconnectionslistlimit %}
+                    <label>{{x.user}}</label>
+                    <label>{{user_id}}</label>
+
+    {% if x.user.id != user_id %}
+
+        <a href="/client/viewconnectionsprofile/{{ x.user.client.id }}">
+            <div class="user">
+                <div class="profile">
+                    <img src="{{ x.user.client.image.url }}" alt="">
+                </div>
+                <h4>{{ x.user.username }}</h4>
+            </div>
+        </a>
+    {% else %}
+
+        <a href="/client/viewconnectionsprofile/{{ x.client.id }}">
+            <div class="user">
+                <div class="profile">
+                    <img src="{{ x.client.image.url }}" alt="">
+                </div>
+                <h4>{{ x.client.user.username }}</h4>
+            </div>
+        </a>
+    {% endif %}
+{% endfor %}
+                    <!-- ends -->
+                </div>
+            </div>
+        </div>
+        <!-- content here-->
+         
+           {% block body %}
+            {% endblock %}
+
+        
+        <!-- ends -->
+        </div>
+    </div>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/index.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        $('#search-input').on('input', function() {
+            var query = $(this).val();
+            if (query.length > 1) {
+                $.ajax({
+                    url: "{% url 'search_suggestions' %}",
+                    data: {'q': query},
+                    success: function(data) {
+                        $('#suggestions').empty();
+
+                        if (data.posts.length > 0) {
+                            console.log('halldfklakf');
+                            var post = data.posts[0];
+                            var searchInputValue = encodeURIComponent($('#search-input').val());
+                            var postLink = $('<a>Posts</a>')
+                                .attr('href', `/client/postviewbysearch/${searchInputValue}/`)
+                                .addClass('suggestion');
+                            console.log(post.id);
+                            $('#suggestions').append(postLink);
+                        }
+
+                        if (data.groups.length > 0) {
+                            var searchInputValue = encodeURIComponent($('#search-input').val());
+                            var group = data.groups[0];
+                            var groupLink = $('<a>Groups</a>')
+                                .attr('href', `/client/groupviewbysearch/${searchInputValue}/`)
+                                .addClass('suggestion');
+                            console.log(group.groupname);
+                            $('#suggestions').append(groupLink);
+                        }
+                        if (data.people.length > 0) {
+                            var searchInputValue = encodeURIComponent($('#search-input').val());
+                            var pe = data.people[0];
+                            var groupLink = $('<a>People</a>')
+                                .attr('href', `/client/peopleviewbysearch/${searchInputValue}/`)
+                                .addClass('suggestion');
+                            $('#suggestions').append(groupLink);
+                        }
+
+                        if (data.clients.length > 0) {
+                            var searchInputValue = encodeURIComponent($('#search-input').val());
+                            var client = data.clients[0];
+                            var clientLink = $('<a>Connections</a>')
+                                .attr('href', `/client/connectionsviewbysearch/${searchInputValue}/`)
+                                .addClass('suggestion');
+                            //console.log(client.user.first_name);
+                            $('#suggestions').append(clientLink);
+                        }
+                    }
+                });
+            } else {
+                $('#suggestions').empty();
+            }
+        });
+
+        $(document).on('click', '.suggestion', function() {
+            $('#search-input').val($(this).text());
+            $('#suggestions').empty();
+        });
+    });
+    function toggleMoreGroup() {
+    var moreGroups = document.getElementById("more-groups");
+    var seeMoreText = document.getElementById("see-more-text");
+
+    if (moreGroups.style.display === "none") {
+        moreGroups.style.display = "block";
+        seeMoreText.innerText = "See less";
+    } else {
+        moreGroups.style.display = "none";
+        seeMoreText.innerText = "groups";
+    }
+}
+</script>
+</body>
+
+
+</html>

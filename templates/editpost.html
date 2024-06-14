@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+<div class="posts">
+            <div class="timeline">
+                <!--create post-->
+                <div class="view create-post">
+                    <div class="input">
+                        <div class="user">
+                            <div class="profile">
+                                <img src="{{ profile_instances.image.url }}" alt="">
+                            </div>
+                        </div>
+                        <form id="postForm" style="width:100%" method="post" enctype="multipart/form-data">
+                             {% csrf_token %}
+                            <textarea id="postContent"  rows="10" style="background-color: var(--lighter);border: none;
+    border-radius: 100px;
+    padding: 15px;
+    width: 100%;
+    margin-left: 10px;
+    color: var(--placeholder);
+    font-size: 0.88rem;
+border-radius:10px;" required name="postcontent">{{ postintance.postcontent }}</textarea>
+                            <div class="image-div">
+                                <img src="{{ postintance.postfile.url }}"/>
+                            </div>
+                            <div class="media">
+                                <div class="category">
+                                    <div class="option">
+                                        <div class="icon">
+                                            <img src="{% static 'img/img/icons/hashtag.png' %}" alt="">
+                                        </div>
+                                        <input type="text" id="hashtags" style="background-color: var(--lighter);
+    border: none;
+    border-radius: 100px;
+    padding: 12px;
+    width: 100%;
+    margin-left: 10px;
+    color: var(--placeholder);
+    font-size: 0.88rem;" placeholder="#addhashtags" name="hash_tag" value="{{ hashtags }}" required>
+                                    </div>
+                                    <div class="option image-input" onclick="openImageDialog()">
+                                        <div class="icon">
+                                            <img src="{% static 'img/img/icons/photos.svg' %}" alt="">
+                                        </div>
+                                        <span id="imagebtn">Add Photo
+                                            <input id="file" type="file" accept="image/*"  name="postfile" style="display: none;" value="{{ postintance.postfile.url }}">
+                                        </span>
+                                    </div>
+                                    <button type="submit" class="post-btn">post</button>
+                                </div>
+                            </div
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ends -->
+{% endblock %}

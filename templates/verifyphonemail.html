@@ -1,0 +1,274 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wanderConnect registration</title>
+    <link rel="stylesheet" href="{% static 'css/registerstyle.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .input-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-box input[type="password"], .input-box input[type="text"] {
+            width: 100%;
+            padding-right: 40px; /* space for the eye icon */
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Sign In</div>
+        <div class="content">
+            <form id="registrationForm" action="#" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="user-details">
+                    <div class="input-box">
+                        <span class="details">User Name</span>
+                        <input type="text" placeholder="Enter your username" name="username" id="username" required>
+                        <span id="username-message" class="error-message"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Email</span>
+                        <input type="email" placeholder="Enter your email" name="email" id="email" required>
+                        <span id="email-message" class="error-message"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Phone Number</span>
+                        <input type="number" placeholder="Enter your number" name="phone_number" id="phone_number" required>
+                        <span id="phone-message" class="error-message"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Password</span>
+                        <input type="password" placeholder="Enter your password" name="password" id="password" required>
+                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('password')"></i>
+                        <span id="password-strength-message" class="error-message"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Confirm Password</span>
+                        <input type="password" placeholder="Confirm your password" name="confirm_password" id="confirm_password" onkeyup="checkPasswordMatch();" required>
+                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('confirm_password')"></i>
+                        <span id="password-message" class="error-message"></span>
+                    </div>
+                </div>
+                <div class="button">
+                    <input id="sendOtp" type="button" value="Send OTP" >
+                </div>
+            </form>
+
+            <div class="modal" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" onclick="closeModal()" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="verifyOtpForm" action="#" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="emailOtp" style="font-style: italic; color: #5b5b5b;">Enter the OTP sent to your email</label>
+                                    <input type="text" name="email_otp" class="form-control" id="emailOtp" required>
+                                    <label for="phoneOtp" style="font-style: italic; color: #5b5b5b;">Enter the OTP sent to your phone</label>
+                                    <input type="text" name="phone_otp" class="form-control" id="phoneOtp" required>
+                                </div>
+                                 <div id="timer" style="font-style: italic; color: #5b5b5b;">Time remaining: <span id="time">10:00</span></div>
+
+                                <input type="submit" value="Verify OTP">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePasswordVisibility(fieldId) {
+            const passwordField = document.getElementById(fieldId);
+            const eyeIcon = passwordField.nextElementSibling;
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+
+        function checkPasswordMatch() {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm_password").value;
+            const message = document.getElementById("password-message");
+
+            if (password !== confirmPassword) {
+                message.innerHTML = "Passwords do not match!";
+            } else {
+                message.innerHTML = "";
+            }
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function checkPasswordStrength(password) {
+            const re = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@])[A-Za-z\d@]{8,}$/;
+            return re.test(password);
+        }
+    function startTimer(duration, display) {
+    let timer = duration, minutes, seconds;
+    const interval = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            clearInterval(interval);
+            document.getElementById("otpModal").style.display = 'none';
+        }
+    }, 1000); // Update every second
+}
+
+    function displayModal() {
+        document.getElementById("otpModal").style.display = "block";
+        // Set a timeout to hide the modal after 10 minutes
+        setTimeout(function() {
+            closeModal();
+        }, 600000); // 10 minutes in milliseconds
+
+        // Start the countdown timer
+        const tenMinutes = 60 * 10; // 10 minutes in seconds
+        const display = document.querySelector('#time');
+        startTimer(tenMinutes, display);
+    }
+
+    function closeModal() {
+        document.getElementById("otpModal").style.display = "none";
+        // Optionally, you can also clear the form fields if needed
+        document.getElementById("verifyOtpForm").reset();
+    }
+
+        document.getElementById("sendOtp").onclick = async function() {
+            console.log('otpclicked')
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const phoneNumber = document.getElementById("phone_number").value;
+            const password = document.getElementById("password").value;
+            let isValid = true;
+
+            // Validate email
+            if (!validateEmail(email)) {
+                document.getElementById("email-message").innerHTML = "Invalid email format!";
+                isValid = false;
+            } else {
+                document.getElementById("email-message").innerHTML = "";
+            }
+
+            // Validate phone number length
+            if (phoneNumber.length < 10) {
+                document.getElementById("phone-message").innerHTML = "Phone number must be at least 10 digits!";
+                isValid = false;
+            } else {
+                document.getElementById("phone-message").innerHTML = "";
+            }
+
+            // Validate password strength
+            if (!checkPasswordStrength(password)) {
+                document.getElementById("password-strength-message").innerHTML = "Password must be at least 8 characters long and include letters, numbers, and '@' symbol!";
+                isValid = false;
+            } else {
+                document.getElementById("password-strength-message").innerHTML = "";
+            }
+
+            if (isValid) {
+            // Check if username and email are unique
+            const uniqueCheckResponse = await fetch('{% url "check_unique" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ username: username, email: email })
+            });
+
+            const uniqueCheckResult = await uniqueCheckResponse.json();
+
+            if (uniqueCheckResult.is_unique) {
+                // Send OTP if username and email are unique
+                const sendOtpResponse = await fetch('/client/send-otp/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ username:username, email: email, phone_number: phoneNumber, password:password })
+                });
+
+                const sendOtpResult = await sendOtpResponse.json();
+
+                if (sendOtpResponse.ok) {
+                    displayModal();
+                } else {
+                    alert(sendOtpResult.message);
+                }
+            } else {
+                if (!uniqueCheckResult.is_unique_username) {
+                    document.getElementById("username-message").innerHTML = "Username already exists!";
+                }
+                if (!uniqueCheckResult.is_unique_email) {
+                    document.getElementById("email-message").innerHTML = "Email already exists!";
+                }
+            }
+        }
+    };
+    document.getElementById("verifyOtpForm").onsubmit = async function(event) {
+        event.preventDefault();
+
+        const emailOtp = document.getElementById("emailOtp").value;
+        const phoneOtp = document.getElementById("phoneOtp").value;
+
+        const verifyOtpResponse = await fetch('{% url "verify_otp" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ email_otp: emailOtp, phone_otp: phoneOtp })
+        });
+
+        const verifyOtpResult = await verifyOtpResponse.json();
+
+        if (verifyOtpResponse.ok) {
+            window.location.href = '/client/2verifyphonemail/';
+        } else {
+            alert(verifyOtpResult.message);
+        }
+
+        // Close the modal after form submission
+        document.getElementById("otpModal").style.display = 'none';
+    };
+    </script>
+</body>
+</html>

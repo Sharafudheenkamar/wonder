@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+ <!-- Bootstrap CSS -->
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+ <link rel="stylesheet" href="{% static '/css/profilestyle.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="main-body">
+              <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex flex-column align-items-center text-center">
+                        <img src="{{client_instance.image.url}}" alt="Admin" class="rounded-circle" id="profile-pic" width="150" height="150">
+                        <div class="mt-3">
+                          <h4>{{client_instance.user.first_name}}</h4>
+                          <p class="text-muted font-size-sm">{{client_instance.place}}</p>
+<!--                          <a href="#" class="btn btn-primary">connect</a>-->
+                          <!-- <a href="#" class="btn btn-primary">remove</a> -->
+                          <a href="/client/viewchatp1/{{client_instance.user.id}}" class="btn btn-primary">Chat</a>
+<!--                             <a href="/client/viewchatp1/{{client_instance.user.id}}" class="btn btn-primary">Remove</a>-->
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card mt-3 connections-div">
+                      <div class="card-body">
+                           <h6 class="d-flex align-items-center mb-3"><img src="img/icons/colored-people.svg" alt=""><i class="text-info mr-2">Connections</i></h6>
+                           <!--connections loop here -->
+                          {% for i in myconnectionslist %}
+                          {% if i.user == client_instance.user %}
+                           <a href="/client/viewconnectionsprofile/{{i.client.id}}">
+                            <div class="user">
+                                <div class="profile">
+                                    <img src="{{i.client.image.url}}" alt="">
+                                </div>
+                                <h6>{{i.clientuserid.first_name}}</h6>
+                            </div>
+                           </a>
+                          {% else %}
+                          <a href="/client/viewconnectionsprofile/{{i.user.client.id}}">
+                            <div class="user">
+                                <div class="profile">
+                                    <img src="{{i.user.client.image.url}}" alt="">
+                                </div>
+                                <h6>{{i.user.first_name}}</h6>
+                            </div>
+                           </a>
+                          {% endif %}
+                          {% endfor %}
+                          <!-- ends -->
+                       </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Full Name</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{client_instance.user.first_name}}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Email</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{client_instance.email}}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Phone</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{client_instance.phone}}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">DOB</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{client_instance.dob}}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Gender</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{client_instance.gender}}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Address</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{client_instance.place}}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Places visited</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          Bay Area, San Francisco, CA,Bay Area, San Francisco, CA,Bay Area, San Francisco, CA,Bay Area, San Francisco, CA,Bay Area, San Francisco, CA,Bay Area, San Francisco, CA,Bay Area, San Francisco, CA
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row gutters-sm">
+                    <div class="col-sm-6 mb-3">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h6 class="d-flex align-items-center mb-3"><img src="img/icons/colored-people.svg" alt=""><i class="text-info mr-2">Groups Created</i></h6>
+                            {% for i in created_groups %}
+                          <div class="menu-item m-3">
+                            <div class="item-row">
+                                <a href="/client/viewwandergroup/{{i.id}}" class="d-flex" style="align-items: end;" >
+                                 <div class="icon">
+                                   <img src="{{i.groupimage.url}}" alt="" width="40px" height="40px" style="border-radius: 10px;">
+                                </div>
+                                <h6 class="mx-3">{{i.groupname}} </h6></a>
+                            </div>
+                          </div>
+                            {% endfor %}
+                         <!-- ends -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                      <div class="card h-100 wrapper">
+                        <div class="card-body shortcuts">
+                          <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Groups joined</i></h6>
+                            {% for j in member_groups %}
+                          <div class="menu-item m-3">
+                               <div class="item-row">
+                                   <a href="/client/viewwandergroup/{{j.id}}" class="d-flex" style="align-items: end;" >
+                                    <div class="icon">
+
+                                      <img src="{{j.groupimage.url}}" alt="" width="40px" height="40px" style="border-radius: 10px;">
+                                   </div>
+                                   <h6 class="mx-3">{{j.groupname}} </h6></a>
+                               </div>
+                           </div>
+                            {% endfor %}
+                          <!-- ends -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script src="js/myscript.js"></script>
+</body>
+</html>

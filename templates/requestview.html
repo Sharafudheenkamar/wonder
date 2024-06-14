@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+<div class="posts">
+            <div class="view friends smaller-margin">
+                <div class="upper" style="margin-bottom:10px ;">
+                    <h6>Connections Requests</h6>
+                </div>
+
+                <div class="group-container">
+                    {% for i in myconnectionrwquests %}
+                    <div class="friend-request-tile">
+                        <a href="commonprofile.html"><img class="profile-image" src="{{ i.user.client.image.url }}" alt="Profile Image"></a>
+                        <div class="profile-info">
+                            <h4 class="profile-name">{{ i.user.username }}</h4>
+                            <div class="button-container">
+                                <a href="{% url 'acceptmyconnectionrequest' i.id %}" class="accept-button">Accept</a>
+                                <a href="{% url 'deletemyconnectionrequest' i.id %}" class="reject-button">Reject</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <!-- ends -->
+
+
+
+                </div>
+        </div>
+
+        <!-- joined groups -->
+            <div class="view friends smaller-margin">
+                <div class="upper" style="margin-bottom:10px ;">
+                    <h6>Group Invites</h6>
+                </div>
+                <div class="joinedgroup-container">
+                  <!-- loop -->
+                    {% for i in mygrouprequest %}
+                  <div class="friend-request-tile">
+                    <a href="/client/viewwandergroup1/{{i.groupid.id}}"><img class="group-profile-image" src="{{ i.groupid.groupimage.url }}" alt="Profile Image"></a>
+                    <div class="profile-info">
+                        <div class="grp-info">
+                            <h4 class="profile-name">{{ i.groupid.groupname }}</h4>
+                            <p>{{ i.groupid.groupdescription }}</p>
+                        </div>
+                        <div class="button-container">
+                            <a href="{% url 'acceptinvitation' i.id %}" class="accept-button">Accept</a>
+                            <a href="#" class="reject-button">Reject</a>
+                        </div>
+                    </div>
+                  </div>
+
+
+                  {% endfor %}
+                <!-- ends -->
+
+                </div>
+</div>
+    {% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+        <div class="posts">
+
+
+        <!-- conndections -->
+            <div class="view friends smaller-margin">
+                <div class="upper" style="margin-bottom:40px ;">
+                    <h6>Peoples</h6>
+                </div>
+                <div class="joinedgroup-container">
+                    <div class="online">
+                        {% for i in allclients %}
+                        <div class="user">
+                            <div class="profile">
+                                <img src="{{ i.image.url }}" alt="">
+                            </div>
+                           <div class="connect-action" style="display: flex; justify-content: space-between; width: 100%;">
+                            <a href="commonprofile.html"><h4>{{ i.user.first_name }}</h4></a>
+                            <a href="{% url 'addconnections1' i.user.id %}" class="add">Connect</a>
+                           </div>
+                        </div>
+
+                        {% endfor %}
+                        <!-- ends -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

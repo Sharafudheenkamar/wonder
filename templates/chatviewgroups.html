@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static '/css/chat.css' %}">
+</head>
+<body>
+
+    <div class="container-fluid py-1">
+        <div class="row">
+
+            <div class="col-md-4 mb-4 mb-md-0" style="margin-right: 20px;">
+
+                <div class="chatnavbar my-3">
+                    <a href="/loadclient/">
+                        <div class="head d-flex">
+                            <img src="{% static '/img/img/icons/logo.png' %}" alt="" width="30px" height="30px">
+                            <h5>Wander Connect</h5>
+                        </div>
+                    </a>
+                </div>
+                <input type="hidden" value="{{user_id}}">
+                <div class="card mask-custom chat-member">
+                    <!-- search -->
+                    <div class="search px-2 pt-3">
+                        <form action="#">
+                            <input class="text" type="text" placeholder="search..." name="" id="search-input">
+                            <div class="icon" style="position: absolute; right: 40px; top: 25px;">
+                                <img src="{% static '/img/img/icons/search.svg' %}" width="20px" height="20px" alt="">
+                            </div>
+                        </form>
+                        <div class="chat-navbar d-flex justify-content-center m-1 p-1" style="border-bottom: 1px solid rgba(255,255,255,.3) !important">
+                            <a class="chat-nav" style="border-right:solid 2px #ffffff5a;" href="/client/viewchatg/">Groups</a>
+                            <a class="chat-nav" style="border-right:solid 2px #ffffff5a;" href="/client/chatviewgroups/">Chat Groups</a>
+                            <a class="chat-nav" style="border-right:solid 2px #ffffff5a;" href="/client/viewchatp/">Chats</a>
+                            <a class="chat-nav" style="border-right:solid 2px #ffffff5a;" href="/client/chatviewpeoples/">Peoples</a>
+                        </div>
+                    </div>
+
+                    <div class="card-body" style="padding: 0;">
+                        <ul class="list-unstyled mb-0" id="chat-list">
+
+                            <!-- users loop here -->
+                            {% for i in chats %}
+                            <li class="p-2 border-bottom chat-item" style="border-bottom: 1px solid rgba(255,255,255,.3)!important;">
+                                <a href="/client/viewchatg1/{{i.groupid.id}}" class="d-flex justify-content-between link-light text-decoration-none">
+                                    <div class="d-flex flex-row justify-content-between" style="align-items: center;align-content: center;">
+                                        <img src="{{ i.groupid.groupimage.url }}" alt="avatar" class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="40px" height="40px">
+                                        <p class="fw-bold mb-0 mx-3 text-white group-name">{{i.groupid.groupname}}</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <!-- loop ends -->
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('search-input').addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            const chatItems = document.querySelectorAll('.chat-item');
+
+            chatItems.forEach(function(item) {
+                const groupName = item.querySelector('.group-name').textContent.toLowerCase();
+                if (groupName.includes(filter)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+ <!-- Bootstrap CSS -->
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+ <link rel="stylesheet" href="{% static '/css/profilestyle.css' %}">
+  <style>
+      .card .list-group-item img{
+      width:30px;
+      height:30px;
+      margin-right:10px;
+      }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/user/loadclient/" class="backbtn" onclick="back()">
+            <div class="icon">
+                <img src="{% static 'img/img/icons/back.png' %}" width="20px" height="20px" alt="">
+            </div>
+</a>
+        <div class="main-body">        
+              <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex flex-column align-items-center text-center">
+                        <img src="{{ profile_instances.image.url }}" alt="Admin" class="rounded-circle" id="profile-pic" width="150" height="150">
+                        <form action="changeimage" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                              <label for="image-upload" id="change-pic">
+                                <img src="{% static 'img/img/icons/camera.svg' %}">
+                            </label>
+                            <input type="file" id="image-upload" accept="image/*" style="display: none;" name="image1" required>
+                            <input type="submit" id="save" value="save" style="display: none;">
+                   </form>
+                        <div class="mt-3">
+                          <h4>{{ profile_instances.user.username }}  </h4>
+                          <p class="text-muted font-size-sm">{{ profile_instances.place }} {{ profile_instances.country }}</p>
+                          <!-- <button class="btn btn-primary">connect</button>
+                          <button class="btn btn-outline-primary">Message</button> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            
+                  <div class="card mt-3">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><a href="/client/chatviewpeoples/"><img src="{% static 'img/img/icons/colored-messenger.svg' %}" alt="">Chats</a></h6>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><a href="#" id="addplace"><img src="{% static 'img/img/icons/place.png' %}" alt="">Add places visited</a></h6>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><a href="#" id="editprofile"><img src="{% static 'img/img/icons/user-settings.png' %}" alt="">Edit Profile</a></h6>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><a href="#" id="changeUsernamePassword"><img src="{% static 'img/img/icons/user.png' %}" alt="">Change UserName/Password</a></h6>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0"><a href="/user/userlogin"><img src="{% static 'img/img/icons/logout1.png' %}" alt="">Logout</a></h6>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <!-- Add Place Modal -->
+                  <div class="modal" id="addPlaceModal" tabindex="-1" aria-labelledby="addPlaceModalLabel" aria-hidden="true">
+                    <div class="modal-dialog ">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="addPlaceModalLabel">Add Place Visited</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="addPlaceForm" action="loadaddplacevisited" method="post">
+                                 {% csrf_token %}
+                            <div class="form-group">
+                              <label for="placeName">Place Name</label>
+                              <input type="text" class="form-control" id="placeName" placeholder="Enter place name" name="placename">
+                            </div> 
+                            <input type="submit" value="add">
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Change Username/Password Modal -->
+<div class="modal" id="changeUsernamePasswordModal" tabindex="-1" aria-labelledby="changeUsernamePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changeUsernamePasswordModalLabel">Change Username/Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+            </div>
+            <div class="modal-body">
+                <form id="changeUsernamePasswordForm" action="changepassword" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="newUsername">Password</label>
+                        <input type="password" class="form-control" id="password"  placeholder="Enter new username" name="username" name="password1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirm_password"  placeholder="Enter new password if Needed" name="password" onkeyup="checkPasswordMatch();" required >
+                        <span id="password-message" class="error-message" style="color:red"></span>
+                    </div>
+                    <input type="submit" value="Save Changes">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm" action="{% url 'editmyprofile' id=profile_instances.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="fullName">First name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Enter first name" value="{{ profile_instances.user.first_name }}" name="first_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">Last Name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Enter last name" value="{{ profile_instances.user.second_name }}" name="second_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">User Name</label>
+                        <input type="text" class="form-control" id="UserName" placeholder="Enter last name" value="{{ profile_instances.user.username }}" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter email" value="{{ profile_instances.email }}" name="email">
+                        {{ form.email.errors }}
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="Enter phone number" value="{{ profile_instances.phone_number }}"  name="phone_number">
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of Birth</label>
+                        <input type="date" class="form-control" id="dob" value="{{ profile_instances.dob }}" name="dob">
+                    </div>
+          <div class="form-group">
+           <label for="gender">Gender</label>
+              {{ profile_instances.gender }}
+    <select class="form-control" id="gender" name="gender">
+        <option value="Male" {% if profile_instances.gender == "Male" %} selected {% endif %}>Male</option>
+        <option value="Female" {% if profile_instances.gender == "Female" %} selected {% endif %}>Female</option>
+        <option value="Other" {% if profile_instances.gender == "Other" %} selected {% endif %}>Other</option>
+    </select>
+</div>
+                    <div class="form-group">
+                        <label for="address">Location</label>
+                        <input type="text" class="form-control" id="address" placeholder="Enter address" value="{{ profile_instances.place }}" name="place">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Country</label>
+                        <input type="text" class="form-control" id="address" placeholder="Enter address" value="{{ profile_instances.country }}" name="country">
+                    </div>
+                    <button type="submit" class="btn btn-primary m-3">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+                  
+
+                  <div class="card mt-3 connections-div">
+                      <div class="card-body">
+                           <h6 class="d-flex align-items-center mb-3"><img src="img/icons/colored-people.svg" alt=""><i class="text-info mr-2">Connections</i></h6>
+                           <!--connections loop here -->
+                          {% for i in myconnectionslist %}
+                           <div class="user">
+                              <div class="profile">
+                                  <img src="{{ i.client.image.url }}" alt="">
+                              </div>
+                              <a href="#">
+                                  <h6>{{ i.client.user.first_name }}</h6>
+                              </a>
+                          </div>
+                          {% endfor %}
+
+                              <!-- ends -->
+                       </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Full Name</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                         {{ profile_instances.user.first_name }} {{ profile_instances.user.second_name }}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Email</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                         {{ profile_instances.email }}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Phone</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{ profile_instances.phone_number }}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">DOB</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{ profile_instances.dob }}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Gender</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{ profile_instances.gender }}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Address</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{ profile_instances.place }}  {{ profile_instances.country }}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Places visited</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            {% for i in visited_places %}
+                            {{ i.placename }},
+                            {% endfor %}
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div class="row gutters-sm">
+                    <div class="col-sm-6 mb-3">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h6 class="d-flex align-items-center mb-3"><img src="img/icons/colored-people.svg" alt=""><i class="text-info mr-2">Your Groups</i></h6>
+                          <!--Your groups loop here -->
+                           {% for i in mygroups %}
+                          <div class="menu-item m-3">
+                            <div class="item-row">
+                                <a href="{% url 'viewwandergroup' i.id %}" class="d-flex" style="align-items: end;" >
+                                 <div class="icon">
+                                   <img src="{{ i.groupimage.url }}" alt="" width="40px" height="40px" style="border-radius: 10px;">
+                                </div>
+                                <h6 class="mx-3">{{ i.groupname }}</h6></a>
+                            </div>
+                        </div>
+                            {% endfor %}
+
+                         <!-- ends -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                      <div class="card h-100 wrapper">
+                        <div class="card-body shortcuts">
+                          <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Groups you are joined</i></h6>
+                          <!-- group loop -->
+
+                           {% for i in mygroups2 %}
+
+                          <div class="menu-item m-3">
+                               <div class="item-row">
+                                   <a href="#" class="d-flex" style="align-items: end;" >
+                                    <div class="icon">
+                                      <img src="{{ i.groupid.groupimage.url }}" alt="" width="40px" height="40px" style="border-radius: 10px;">
+                                   </div>
+                                   <h6 class="mx-3">{{ i.groupid.groupname }} </h6></a>
+                               </div>
+                           </div>
+                            {% endfor %}
+
+
+                          <!-- ends -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+        <script src="{% static 'js/myscript.js' %}"></script>
+<script>
+ function checkPasswordMatch() {
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirm_password").value;
+    var message = document.getElementById("password-message");
+    if (password != confirmPassword) {
+      message.innerHTML = "Passwords do not match!";
+    } else {
+      message.innerHTML = "";
+    }
+  }
+</script>
+
+</body>
+</html>

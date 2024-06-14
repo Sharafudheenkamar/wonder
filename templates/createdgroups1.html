@@ -1,0 +1,299 @@
+
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+<div class="posts">
+            <div class="timeline">
+
+                <!--group-->
+                <div class="group">
+                   <div class="group-image" style="background-image:url('{{ wandergroup_instances.groupimage.url }}')"></div>
+                       <div class="group-cnt">
+                           <div class="group-heading">{{ wandergroup_instances.groupname }}</div>
+                           <div class="group-description">
+                               <p>{{ wandergroup_instances.groupdescription }}</p>
+                           </div>
+                       </div>
+                   </div>
+
+                    <div class="view smaller-margin">
+                       <div class="upper">
+                           <div class="title">
+                               <div class="icon">
+                                   <img src="{{ wandergroup_instances.groupimage.url }}" alt="groups" width="30px" height="35px">
+                               </div>
+                               <span style="padding-left: 10px;">Group members</span>
+                           </div>
+                           <a href="#" id="inviteButton">Invite Members</a>
+                       </div>
+
+                        <!-- The Modal -->
+                        <div id="myModalinvite" class="modal" style="height: max-content;">
+                            <div class="modal-content">
+                                <h2 style="color: #fff;">Select friends to invite</h2>
+                                <div id="friendsList" style="position: relative;">
+                                    <form method="post" action="{% url 'invite_friends' new_wandergroup.id  %}">
+
+                                    {% csrf_token %}
+                                        <button type="submit" class="invite-button" style="position: absolute; top: -20px; right: 10px;">Invite</button>
+                                        <div class="connection-container">
+                                            <!-- loop here -->
+                                            {% for i in myconnectionslist %}
+                                            {% if i.user.id != user_id %}
+                                            <div class="user">
+                                               <div class="profile">
+                                                   <img src="{{ i.user.client.image.url }}" alt="">
+                                               </div>
+                                               <h4>{{ i.user.first_name }}</h4>
+                                              <input type="checkbox" name="friends" value="{{ i.user.client.user.id }}">
+                                                <p>Checkbox value: {{ i.user.id }}</p>
+                                           </div>
+                                            {% else %}
+                                            <div class="user">
+                                               <div class="profile">
+                                                   <img src="{{ i.client.image.url }}" alt="">
+                                               </div>
+                                               <h4>{{ i.client.user.first_name }}</h4>
+                                              <input type="checkbox" name="friends" value="{{ i.client.user.id }}">
+                                                <p>Checkbox value: {{ i.client.user.id }}</p>
+                                           </div>
+                                            {% endif %}
+
+                                        {% endfor %}
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                       <div class="members-container">
+                           <div class="members">
+                           <!-- groups loop here -->
+                               {% for i in groupmemberinstance %}
+                           <div class="item">
+                                <div class="user">
+                                   <div class="memberprofile">
+                                      <abbr title="{{ i.user.username }}">
+                                        <img src="{{ i.user.client.image.url }}" alt="">
+                                      </abbr>
+                                   </div>
+                               </div>
+                           </div>
+                               {% endfor %}
+
+                           <!--loop ends-->
+                        </div>
+                        <div class="button-container">
+                            <button class="see-all-button">See All</button>
+                        </div>
+                    </div>
+
+                </div>
+                <!--create post-->
+                <div class="view create-post">
+                    <div class="input" style="padding-bottom: 20px;position: relative;">
+                        <div class="user" style="position: absolute;top:-10px;left:-40px">
+                            <div class="profile">
+                                <img src="{{ profile_instances.client.image.url }}" alt="">
+                            </div>
+                        </div>
+                        <a href="{% url 'loadaddgrouppost' new_wandergroup.id %} "><input type="text" placeholder="create post..."></a>
+\                    </div>
+                </div>
+
+                <!--post container-->
+                {% for j in post_instances %}
+                <div class="view view-post-container smaller-margin">
+                    <!-- loop here -->
+                    <div class="view-post">
+                        <div class="upper">
+                            <div class="d-flex">
+                                <div class="user">
+                                    <div class="profile">
+                                        <img src="{{j.client_image_url}}" alt="">
+                                    </div>
+                                </div>
+
+                                <div class="info">
+                                    <h6 class="name">
+                                        {{j.post.user.first_name}}
+                                    </h6>
+                                    <span class="time">{{j.post.created_at|timesince }}</span>
+                                </div>
+                            </div>
+
+                            <div class="dots">
+                                <div class="dot"></div>
+                            </div>
+                        </div>
+
+                        <div class="desc">
+                            <p>{{j.post.postcontent}}</p>
+                        </div>
+
+                        <div class="post-img">
+                            <img src="{{j.post.postfile.url}}" alt="">
+                        </div>
+
+                        <div class="actions-container">
+                    <div class="action" onclick="toggleLike({{ j.post.id }})" id="like-{{ j.post.id }}">
+                        <div class="icon">
+                            {% if j.post.id in user_likes_dict %}
+                                <i class="fa-solid fa-heart"></i>
+                            {% else %}
+                                <i class="fa-regular fa-heart"></i>
+                            {% endif %}
+                        </div>
+                        <span id="like-count-{{ j.post.id }}">{{ j.post.likepost_set.count }}</span>
+                    </div>
+
+                            <div class="action" onclick="displayComments({{ j.post.id }})">
+                                <div class="icon">
+                                    <img src="{% static '/img/img/icons/comment.svg' %}" alt="">
+                                </div>
+                                <span>
+                                    comment
+                                </span>
+                            </div>
+
+                            <div class="action">
+                                <div class="icon">
+                                    <img src="{% static '/img/img/icons/share.svg' %}" alt="">
+                                </div>
+                                <span>
+                                    share
+                                </span>
+                            </div>
+                        </div>
+
+<div class="write-comment">
+    <div class="user">
+        <div class="profile">
+            <img src="{{j.client_image_url}}" alt="">
+        </div>
+    </div>
+    <div class="input">
+        <form action="javascript:void(0);" onsubmit="submitComment({{ j.post.id }})" style="display: flex;justify-content: space-between; width: 100%;">
+            <input type="text" id="comment-input-{{ j.post.id }}" style="color: #ddd7d7;" placeholder="Write a comment" name="comment">
+            <div class="media">
+                <div class="icon">
+                    <button type="submit" style="background: transparent;border: none;cursor: pointer;">
+                        <img src="{% static '/img/img/icons/sendicon.png'%}" width="100px" height="100px" alt="">
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+                         <!-- comments -->
+                       <div class="comment-div" id="comment-div-{{ j.post.id }}" style="display: none;">
+                        <h5 style="color: #ddd7d7; margin-top: 20px;">comments</h5>
+                           <!-- comments loop here -->
+
+    {% for comment in j.comments %}
+        <div class="comment-container">
+            <img src="{{ comment.user.client.image.url }}" alt="{{ comment.user.username }}" class="profile-img">
+            <div class="comment-content">
+                <h4>{{ comment.user.username }}</h4>
+                <p>{{ comment.comment }}</p>
+            </div>
+        </div>
+    {% endfor %}
+                           <!-- ends -->
+                       </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+</div>
+<script>
+// Get the modal
+var modal = document.getElementById("myModalinvite");
+
+// Get the button that opens the modal
+var btn = document.getElementById("inviteButton");
+
+
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function toggleLike(postId) {
+    $.ajax({
+        url: `/client/likeunlikepost/${postId}/`,
+        type: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+            const likeButton = $(`#like-${postId}`);
+            const likeCount = $(`#like-count-${postId}`);
+
+            if (response.like_status) {
+                likeButton.find('.icon i').removeClass('fa-regular fa-heart').addClass('fa-solid fa-heart');
+            } else {
+                likeButton.find('.icon i').removeClass('fa-solid fa-heart').addClass('fa-regular fa-heart');
+            }
+
+            likeCount.text(response.like_count);
+        },
+        error: function(error) {
+            console.log('Error:', error);
+        }
+    });
+}
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    function submitComment(postId) {
+        var commentInput = $('#comment-input-' + postId);
+        var commentText = commentInput.val();
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'addcomment' %}",  // Update with the correct URL name
+            data: {
+                'postid': postId,
+                'comment': commentText,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'  // Make sure to include the CSRF token
+            },
+            success: function(response) {
+                if (response.status === 'OK') {
+                    var commentData = response.comment;
+                    var newCommentHtml = `
+                        <div class="comment-container">
+                            <img src="${commentData.user.image_url}" alt="${commentData.user.username}" class="profile-img">
+                            <div class="comment-content">
+                                <h4>${commentData.user.username}</h4>
+                                <p>${commentData.comment}</p>
+                            </div>
+                        </div>
+                    `;
+                    $('#comment-div-' + postId).append(newCommentHtml);
+
+                    commentInput.val('');  // Clear the input
+                } else {
+                    alert('Failed to add comment');
+                }
+            },
+            error: function() {
+                alert('Error occurred');
+            }
+        });
+    }
+</script>
+{% endblock %}

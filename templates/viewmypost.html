@@ -1,0 +1,212 @@
+
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+<div class="posts">
+
+            <div class="timeline">
+                  <!--create post-->
+                <div class="view create-post">
+                    <div class="input" style="padding-bottom: 20px;">
+                        <div class="user">
+                            <div class="profile">
+                                <img src="{{ profile_instances1.image.url }}" alt="">
+                            </div>
+                        </div>
+  <a href="/client/loadaddpost"><input type="text" placeholder="create post..."></a>                    </div>
+                </div>
+                <!--post container-->
+                                    {% csrf_token %}
+                    {% for i in posts_with_hashtags %}
+                <div class="view view-post-container smaller-margin">
+
+                    <div class="view-post">
+                        <div class="upper">
+                            <div class="d-flex">
+                                <div class="user">
+                                    <a href="commonprofile.html">
+                                        <div class="profile">
+                                            <img src="{{ profile_instances1.image.url }}" alt="">
+
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="info">
+                                    <h6 class="name">
+                                        {{ profile_instances1.user.first_name }}
+                                    </h6>
+                                    <span class="time">{{ i.post.created_at|timesince }}ago</span>
+                                </div>
+                            </div>
+
+                            <div class="dots">
+                                <div class="dropdown">
+                                <div class="dot dropbtn"></div>
+                                    <div class="dropdown-content">
+                                        <a href="{% url 'editpost' i.post.id %}">Edit</a>
+                                        <a href="{% url 'deletepost' i.post.id %}">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="desc">
+                            <p>{{i.hashtags_string}}</p>
+                            <p>{{ i.post.postcontent }}</p>
+                        </div>
+
+                        <div class="post-img">
+                            <img src="{{ i.post.postfile.url }}" alt="">
+                        </div>
+
+                        <div class="actions-container">
+                    <div class="action" onclick="toggleLike({{ i.post.id }})" id="like-{{ i.post.id }}">
+                        <div class="icon">
+                            {% if i.post.id in user_likes_dict %}
+                                <i class="fa-solid fa-heart"></i>
+                            {% else %}
+                                <i class="fa-regular fa-heart"></i>
+                            {% endif %}
+                        </div>
+
+                        <span id="like-count-{{ i.post.id }}">{{ i.post.likepost_set.count }}</span>
+                    </div>
+
+                            <div class="action" onclick="displayComments({{ i.post.id }})">
+                                <div class="icon">
+                                    <img src="{% static '/img/img/icons/comment.svg' %}" alt="">
+                                </div>
+                                <span>
+                                    comment
+                                </span>
+                            </div>
+
+                            <div class="action">
+                                <div class="icon">
+                                    <img src="{% static '/img/img/icons/share.svg' %}" alt="">
+                                </div>
+                            <span onclick="shareToWhatsApp({{ i.post.id }})">share</span>
+                            </div>
+                        </div>
+
+                        <div class="write-comment">
+                            <div class="user">
+                                <div class="profile">
+                                    <img src="{{ profile_instances1.image.url }}" alt="">
+                                </div>
+                            </div>
+    <div class="input">
+        <form action="javascript:void(0);" onsubmit="submitComment({{ i.post.id }})" style="display: flex;justify-content: space-between; width: 100%;">
+            <input type="text" id="comment-input-{{ i.post.id }}" style="color: #ddd7d7;" placeholder="Write a comment" name="comment">
+            <div class="media">
+                <div class="icon">
+                    <button type="submit" style="background: transparent;border: none;cursor: pointer;">
+                        <img src="{% static '/img/img/icons/sendicon.png' %}" width="100px" height="100px" alt="">
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+                        </div>
+
+                         <!-- comments -->
+                       <div class="comment-div" id="comment-div-{{ i.post.id }}" style="display: none;">
+                        <h5 style="color: #ddd7d7; margin-top: 20px;">comments</h5>
+                           <!-- comments loop here -->
+
+    {% for comment in i.comments %}
+        <div class="comment-container">
+            <img src="{{ comment.user.client.image.url }}" alt="{{ comment.user.username }}" class="profile-img">
+            <div class="comment-content">
+                <h4>{{ comment.user.first_name }}</h4>
+                <p>{{ comment.comment }}</p>
+            </div>
+        </div>
+    {% endfor %}
+
+                       </div>
+                    </div>
+                </div>
+                    {% endfor %}
+
+            </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function toggleLike(postId) {
+    $.ajax({
+        url: `/client/likeunlikepost/${postId}/`,
+        type: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+            const likeButton = $(`#like-${postId}`);
+            const likeCount = $(`#like-count-${postId}`);
+
+            if (response.like_status) {
+                likeButton.find('.icon i').removeClass('fa-regular fa-heart').addClass('fa-solid fa-heart');
+            } else {
+                likeButton.find('.icon i').removeClass('fa-solid fa-heart').addClass('fa-regular fa-heart');
+            }
+
+            likeCount.text(response.like_count);
+        },
+        error: function(error) {
+            console.log('Error:', error);
+        }
+    });
+}
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    function submitComment(postId) {
+        var commentInput = $('#comment-input-' + postId);
+        var commentText = commentInput.val();
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'addcomment' %}",  // Update with the correct URL name
+            data: {
+                'postid': postId,
+                'comment': commentText,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'  // Make sure to include the CSRF token
+            },
+            success: function(response) {
+                if (response.status === 'OK') {
+                    var commentData = response.comment;
+                    var newCommentHtml = `
+                        <div class="comment-container">
+                            <img src="${commentData.user.image_url}" alt="${commentData.user.username}" class="profile-img">
+                            <div class="comment-content">
+                                <h4>${commentData.user.username}</h4>
+                                <p>${commentData.comment}</p>
+                            </div>
+                        </div>
+                    `;
+                    $('#comment-div-' + postId).append(newCommentHtml);
+
+                    commentInput.val('');  // Clear the input
+                } else {
+                    alert('Failed to add comment');
+                }
+            },
+            error: function() {
+                alert('Error occurred');
+            }
+        });
+    }
+
+</script>
+<script>
+    function shareToWhatsApp(postId) {
+    const postUrl = window.location.origin + "/client/viewpost/" + postId; // Update with actual post URL
+    const text = "Check out this post: " + postUrl;
+    const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(text);
+    window.open(whatsappUrl, '_blank');
+}
+</script>
+{% endblock %}

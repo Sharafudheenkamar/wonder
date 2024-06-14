@@ -1,0 +1,408 @@
+/*  variables and defaul css */
+:root {
+    --primary: rgb(3, 29, 46);
+    --accent: rgb(7, 42, 65);
+    --lighter: rgb(26, 68, 100);
+    --blue: rgb(29, 63, 214);
+    --font: rgb(206, 206, 206);
+    --placeholder: rgb(219, 219, 219);
+    --notification: #ff4d4d;
+    --green: rgb(19, 209, 19);
+    --border: #5AA1FF;
+    --border-bottom: #043474;
+    --white: #fff;
+    --post-btn:#095fd0;
+}
+
+
+.post-btn{
+    background-color: cornflowerblue;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+.option{
+    cursor: pointer;
+}
+.post-btn{
+    padding: 10px 25px;
+    background-color: var(--post-btn);
+    color:#fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.create-post .user{
+    position: absolute;
+    top: 70px;
+    left:70px
+}
+.groupform > input{
+    margin-bottom: 10px;
+}
+
+.group {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .group-image {
+    width: 100%;
+    height: 200px; /* Adjust the height as needed */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .group-cnt {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    box-sizing: border-box;
+    color: #fff;
+  }
+
+  .group-heading {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  
+  .group-description {
+    margin-top: 5px;
+  }
+
+  
+.posts .view .members .user .memberprofile {
+    position: relative;
+    overflow: visible;
+}
+
+.posts .view .members .user .memberprofile img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.posts .view .members {
+    padding: 20px 0;
+    display: flex;
+    gap: 10px;
+}
+.modal-content .user .profile::after{
+    content: none;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0px;
+    right: -5px;
+    border: 3px solid var(--accent);
+}
+.posts .view .members .memberprofile::after {
+    content: '';
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0px;
+    right: -5px;
+    border: 3px solid var(--accent);
+}
+.members-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on iOS devices */
+}
+.members-container::-webkit-scrollbar {
+    display: none; /* Hides scrollbar in Chrome, Safari, and Opera */
+}
+.members {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    -ms-overflow-style: none; /* Hides scrollbar in IE and Edge */
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
+
+.members::-webkit-scrollbar {
+    display: none; /* Hides scrollbar in Chrome, Safari, and Opera */
+}
+
+.item {
+    margin-right: 10px; 
+}
+.members-container {
+    display: flex;
+    align-items: center;
+}
+
+.members {
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on iOS devices */
+}
+
+.see-all-button {
+    margin-left: 10px; /* Adjust as needed */
+    padding: 10px 10px;
+    background-color: #007bff; /* Example background color */
+    color: #fff; /* Example text color */
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.see-all-button:hover {
+    background-color: #0056b3; /* Example hover background color */
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    height: max-content;
+    overflow: auto;
+
+}
+.modal-content {
+    background-color: #252424;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    height:auto;
+
+}
+.user {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.invite-button {
+    margin-left: auto;
+    padding: 5px 10px;
+    background-color: #005ebc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.invite-button:hover {
+    background-color: #024c96;
+}
+.comment-div{
+    max-height: 200px; 
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        display: none; 
+    }
+}
+.comment-container {
+    display: flex;
+    margin-bottom: 20px;
+    background-color: #888;
+    padding: 10px;
+    margin: 10px 5px;
+    border-radius: 10px;
+}
+.profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.comment-content {
+    flex: 1;
+}
+
+.image-div img {
+    max-width: 300px; /* Adjust as needed */
+    max-height: 200px; /* Adjust as needed */
+}
+.group-container{
+    max-height: 400px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        display: none; 
+    }
+}
+.mygroup {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.mygroup-image {
+    width: 100%;
+    height: 200px; /* Adjust the height as needed */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mygroup-cnt {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    box-sizing: border-box;
+    color: #fff;
+}
+
+.mygroup-heading {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.mygroup-description {
+    margin:10px 0px;
+    display: none;
+}
+.mygroup:hover .mygroup-description {
+    display: block; /* Show description on hover */
+}
+
+.join-button {
+    padding: 5px 10px;
+    background-color: #2388f3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; /* Remove default anchor underline */
+}
+
+/* Hover effect for the anchor tag */
+.join-button:hover {
+    background-color: #076cd7;
+}
+.view-button {
+    padding: 5px 10px;
+    background-color:  #2388f3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; /* Remove default anchor underline */
+}
+
+/* Hover effect for the anchor tag */
+.view-button:hover {
+    background-color: #076cd7;
+}
+.remove{
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: rgba(7, 99, 155, 0.698);
+    display: inline-block;
+    margin-right:5px;
+
+
+}
+
+.friend-request-tile {
+    background-color: rgba(110, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 3D box shadow effect */
+    margin-bottom: 10px;
+    
+}
+
+.profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+.group-profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 10%;
+    margin-right: 15px;
+}
+.profile-info {
+   display: flex;
+   justify-content:space-between;
+   width: 100%;
+}
+
+.profile-name {
+    margin: 0;
+    margin-bottom: 5px;
+    color: var(--font);
+}
+
+.button-container {
+    display: flex;
+}
+
+.accept-button,
+.reject-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    height: min-content;
+}
+
+.accept-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    display: inline;
+}
+
+.reject-button {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+.request-container{
+   max-height: 200px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        display: none; 
+    }
+}
+.connection-container{
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        display: none; 
+    }
+}
+.actions-container .icon .fa-regular{
+color:#fff;
+font-size: larger;
+}
+.actions-container .icon .fa-solid{
+color:red;
+font-size: larger;
+}
+

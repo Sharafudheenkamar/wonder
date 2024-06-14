@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+<div class="posts">
+            <!--create groups-->
+            <div class="view smaller-margin">
+                <div class="upper">
+                    <div class="title">
+                        <div class="icon">
+                            <img src="{% static '/img/img/icons/groups.png' %}" alt="groups" width="30px" height="35px">
+                        </div>
+                        <span style="padding-left: 10px;">Groups</span>
+                    </div>
+                    <a href="/client/addwandergroup/">
+                        Create group
+                    </a>
+                </div>
+            </div>
+
+            <div class="view friends smaller-margin">
+                <div class="upper" style="margin-bottom:10px ;">
+                    <h6>Group Join requests</h6>
+                </div>
+                <div class="joinedgroup-container request-container">
+                  <!-- loop -->
+                    {% for i in mygrouprequest %}
+                  <div class="friend-request-tile">
+                       <a href="commonprofile.html"><img class="group-profile-image" src="{{ i.user.client.image.url }}" alt="Profile Image"></a>
+                       <div class="profile-info">
+                          <div class="grp-info">
+                              <h4 class="profile-name">{{ i.user.username }}</h4>
+                              <p>{{ i.groupid.groupname }}</p>
+                          </div>
+                          <div class="button-container">
+                              <a href="{% url 'mygrouprequestaccept' i.id %}" class="accept-button">Accept</a>
+                              <a href="/client/mygrouprequestreject/{{i.user.id}}/{{i.groupid.id}}" class="reject-button">Reject</a>
+                          </div>
+                       </div>
+                  </div>
+
+                  {% endfor %}
+
+                  <!-- ends -->
+                </div>
+            </div>
+
+
+
+                <div class="view friends smaller-margin">
+                <div class="upper" style="margin-bottom:10px ;">
+                    <h6>Groups You can join</h6>
+                </div>
+
+                <div class="group-container">
+                  {% for i in wandergroup_instances %}
+                    <div class="mygroup item">
+                        <div class="mygroup-image" style="background-image: url('{{ i.groupimage.url }}');"></div>
+                        <div class="mygroup-cnt">
+                            <div class="mygroup-heading">{{ i.groupname }}</div>
+                            <div class="mygroup-count">2000 members</div>
+                            <div class="mygroup-description" id="mygroup-description">
+                                <p>{{ i.groupdescription }}</p>
+                            </div>
+                            <div class="grpbtns">
+                                <a href="{% url 'joingrouprequest' i.id %}" class="join-button">Join</a>
+                                <a href="{% url 'gropuyoucanjoinindetail' i.id %}" class="view-button">view</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+
+
+                </div>
+           </div>
+
+            <!-- created groups -->
+
+            <div class="view friends smaller-margin">
+                <div class="upper" style="margin-bottom:10px ;">
+                    <h6>Your Groups</h6>
+                </div>
+                <div class="group-container">
+                {% for x in created_groups %}
+                    <div class="mygroup item">
+                        <div class="mygroup-image" style="background-image: url('{{ x.groupimage.url }}');"></div>
+                        <div class="mygroup-cnt">
+                            <div class="mygroup-heading">{{ x.groupname }}</div>
+                            <div class="mygroup-count">2000 members</div>
+                            <div class="mygroup-description" id="mygroup-description">
+                                <p>{{ x.groupdescription }}</p>
+                            </div>
+                            <div class="grpbtns">
+                                <a href="{% url 'viewwandergroup' x.id %}" class="view-button">view</a>
+                                <a href="{% url 'deletewandergroup' x.id %}" class="view-button">delete</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+           <!-- joined groups -->
+            <div class="view friends smaller-margin">
+                <div class="upper" style="margin-bottom:10px ;">
+                    <h6>Groups you are joined</h6>
+                </div>
+                <div class="group-container">
+                {% for x in member_groups %}
+                    <div class="mygroup item">
+                        <div class="mygroup-image" style="background-image: url('{{ x.groupimage.url }}');"></div>
+                        <div class="mygroup-cnt">
+                            <div class="mygroup-heading">{{ x.groupname }}</div>
+                            <div class="mygroup-count">2000 members</div>
+                            <div class="mygroup-description" id="mygroup-description">
+                                <p>{{ x.groupdescription }}</p>
+                            </div>
+                            <div class="grpbtns">
+                                <a href="/client/mygrouprequestreject/{{user_id}}/{{x.id}}" class="join-button">Exit</a>
+                                <a href="/client/viewwandergroup/{{x.id}}" class="view-button">view</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+
+
+          <!-- ends -->
+        </div>
+
+{% endblock %}

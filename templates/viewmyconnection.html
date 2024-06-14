@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+        <div class="posts">
+            <div class="view friends smaller-margin">
+                <div class="upper" style="margin-bottom:10px ;">
+                    <h6>people you may know</h6>
+                </div>
+
+
+                <div class="owl-carousel owl-theme people">
+                    {% for i in allclients %}
+                     <form action="/client/addconnections/" method="post">
+                            {% csrf_token %}
+                    <div class="item">
+                        <div class="person-img">
+
+                            <img src="{{ i.image.url }}" alt="">
+                        </div>
+
+                        <div class="info">
+                            <a href="commonprofile.html">
+                                <h4>
+                                    <input type="hidden" value="{{i.id}}" name="client">
+                                        <input type="hidden" value="{{i.user.id}}" name="clientuserid">
+                                        {{ i.user.username }}
+                                </h4>
+                            </a>
+                            <span>{{ i.place }}</span>
+                                <button type="submit">
+                                    Connect Now
+                                </button>
+                        </div>
+                    </div>
+                         </form>
+                    {% endfor %}
+
+                    <!---->
+
+                    <!---->
+
+
+                    <!---->
+                </div>
+
+            </div>
+
+        <!-- conndections -->
+            <div class="view friends smaller-margin">
+                <div class="upper" style="margin-bottom:40px ;">
+                    <h6>Your connections</h6>
+                </div>
+                <div class="joinedgroup-container">
+                    <div class="online">
+                        {% for i in myconnectionslist %}
+
+                         {% if i.user.id != user_id %}
+         <a href="/client/viewconnectionsprofile/{{i.user.client.id}}">
+                        <div class="user">
+                           <div class="profile">
+                              <img src="{{ i.user.client.image.url }}" alt="">
+                           </div>
+                           <h4>{{ i.user.username }} &nbsp;</h4>
+                            </div>
+
+         </a>
+
+                               <a href="{% url 'removeconnection' i.id %}" class="remove">remove</a>
+
+
+
+
+
+    {% else %}
+         <a href="/client/viewconnectionsprofile/{{i.client.id}}">
+                        <div class="user">
+                           <div class="profile">
+                              <img src="{{ i.client.image.url }}" alt="">
+                           </div>
+                           <h4>{{ i.client.user.username }}</h4>
+                        </div>
+                   </a>
+                        <a href="{% url 'removeconnection' i.id %}" class="remove">remove</a>
+
+    {% endif %}
+
+
+
+
+                        {% endfor %}
+                        <!-- ends -->
+                    </div>
+                </div>
+            </div>
+
+        <!-- ends -->
+{% endblock %}

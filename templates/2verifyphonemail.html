@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wanderConnect registration</title>
+    <link rel="stylesheet" href="{% static 'css/registerstyle.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .input-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-box input[type="password"], .input-box input[type="text"] {
+            width: 100%;
+            padding-right: 40px; /* space for the eye icon */
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Sign In</div>
+        <div class="content">
+            <form id="registrationForm" action="/client/2verifyphonemail/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="user-details">
+                    <div class="input-box">
+                        <span class="details">First Name</span>
+                        <input type="text" placeholder="Enter your name" name="first_name" required>
+                        {{ form.first_name.errors }}
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Last Name</span>
+                        <input type="text" placeholder="Enter your name" name="second_name" required>
+                        {{ form.second_name.errors }}
+                    </div>
+
+                    <div class="gender-details inputs">
+                        <input type="radio" name="gender" id="dot-1" value="Male">
+                        <input type="radio" name="gender" id="dot-2" value="Female">
+                        <input type="radio" name="gender" id="dot-3" value="Other">
+                        <span class="gender-title">Gender</span>
+                        <div class="category">
+                            <label for="dot-1">
+                                <span class="dot one"></span>
+                                <span class="gender">Male</span>
+                            </label>
+                            <label for="dot-2">
+                                <span class="dot two"></span>
+                                <span class="gender">Female</span>
+                            </label>
+                            <label for="dot-3">
+                                <span class="dot three"></span>
+                                <span class="gender">Other</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">DOB</span>
+                        <input type="date" placeholder="Enter your DOB" name="dob" required>
+                        {{ form.dob.errors }}
+                    </div>
+
+                    <div class="input-box">
+                        <span class="details">Location</span>
+                        <input type="text" placeholder="Enter your location" name="place" required>
+                        {{ form.place.errors }}
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Country</span>
+                        <input type="text" placeholder="Enter your Country" name="country" required>
+                        {{ form.country.errors }}
+                    </div>
+
+                    <div class="input-box">
+                        <span class="details">Image</span>
+                        <input class="input" style="padding: 0;" type="file" id="picture" name="image" required>
+                        {{ form.image.errors }}
+                    </div>
+                </div>
+                <div class="button">
+                    <input id="forgot" type="submit" value="Register">
+                </div>
+
+                <div class="modal" id="enteremailmodal" tabindex="-1" aria-labelledby="enteremailmodallabel" aria-hidden="true" style="display: none;">
+
+    </div>
+            </form>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

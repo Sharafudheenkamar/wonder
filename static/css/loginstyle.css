@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+.flex {
+  display: flex;
+  align-items: center;
+}
+.container {
+  padding: 0 15px;
+  min-height: 100vh;
+  justify-content: center;
+  background: #f0f2f5;
+}
+.facebook-page {
+  justify-content: space-between;
+  max-width: 1000px;
+  width: 100%;
+}
+.facebook-page .text {
+  margin-bottom: 90px;
+}
+.facebook-page h1 {
+  color: #1877f2;
+  font-size: 4rem;
+  margin-bottom: 10px;
+}
+.facebook-page p {
+  font-size: 1.75rem;
+  white-space: nowrap;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+form input {
+  height: 55px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  padding: 0 14px;
+}
+form input:focus {
+  outline: none;
+  border-color: #1877f2;
+}
+::placeholder {
+  color: #777;
+  font-size: 1.063rem;
+}
+.link {
+  display: flex;
+  flex-direction: column;
+  text-align: end;
+  gap: 15px;
+}
+.link .login {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(to right, #f21885, #1877f2);  padding: 15px 0;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+.link .login:hover {
+  background: linear-gradient(to right, #bd1267, #135dbf);}
+form a {
+  text-decoration: none;
+}
+.link .forgot {
+  color: #1877f2;
+  font-size: 0.875rem;
+
+}
+.link .forgot:hover {
+  text-decoration: underline;
+}
+hr {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+  .facebook-page {
+    flex-direction: column;
+    text-align: center;
+  }
+  .facebook-page .text {
+    margin-bottom: 30px;
+  }
+}
+@media (max-width: 460px) {
+  .facebook-page h1 {
+    font-size: 3.5rem;
+  }
+  .facebook-page p {
+    font-size: 1.3rem;
+  }
+  form {
+    padding: 15px;
+  }
+}
+.modal {
+  display: none; /* Hide the modal by default */
+  position: fixed; /* Stay in place when scrolling */
+  z-index: 1; /* Sit on top of other content */
+  left: 15%;
+  top: 10%;
+  width: 70%; /* Full width */
+  height: max-content; /* Full height */
+  overflow: auto; /* Enable scroll if content overflows */
+  background-color: rgba(0, 0, 0, 0.4); /* Transparent black background */
+}
+
+/* Modal Content */
+.modal-content {
+  margin: 15% auto; /* 15% from the top and centered horizontally */
+  width: 70%; /* 30% width */
+  animation-name: fadeIn; /* Add fade in animation */
+  animation-duration: 0.4s; /* Animation duration */
+  padding: 10px;
+
+}
+.modal-body{
+  margin: auto;
+  width: 100%;
+  background-color: #fefefe; /* White background */
+  padding: 30px;
+
+}
+
+.form-group input{
+  margin-top: 30px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+/* Close Button */
+.close {
+  color: #f0efef; /* White text color */
+  position: absolute;
+  top: 15px; /* 15px from the top */
+  right: 35px; /* 35px from the right */
+  font-size: 28px; /* Large font size */
+  font-weight: bold; /* Bold text */
+  background-color: transparent;
+  border: none;
+}
+
+.close:hover,
+.close:focus {
+  color: rgb(229, 11, 11); /* Black text on hover */
+  text-decoration: none; /* Remove underline */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  border: none;
+}
+
+
+.form-group {
+  margin-bottom: 15px; /* Margin between form elements */
+}
+
+.form-control {
+  width: 100%; /* Full width input field */
+  padding: 12px 20px; /* Padding for input field */
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 4px; /* Rounded corners */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+input[type="submit"] {
+  background: linear-gradient(to right, #bd1267, #135dbf); /* Green background color */
+  color: white; /* White text color */
+  padding: 12px 20px; /* Padding for submit button */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  width: 100%;
+}
+
+input[type="submit"]:hover {
+  background: #135dbf; /* Darker green on hover */
+}

@@ -1,0 +1,49 @@
+<!-- base extends here -->
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+        <div class="posts">
+            <div class="timeline">
+                <!--create post-->
+                <div class="view create-post">
+                    <div class="input">
+                        <div class="user">
+                            <img src="{% static 'img/img/icons/groups.png' %}" alt="groups" width="40px" height="45px">
+                        </div>
+                        <form class="groupform" id="groupform" style="width:100%" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input id="groupname" placeholder="group name" name="groupname" required>
+                            <input id="groupdescription" placeholder="some thing about group..." name="groupdescription" required>
+                            <div class="image-div">
+                                <!-- Selected image will be displayed here -->
+                            </div>
+                            <div class="media">
+                                <div class="category">
+                                    <div class="option">
+                                        <div class="icon">
+                                            <img src="{% static 'img/img/icons/hashtag.png' %}" alt="">
+                                        </div>
+                                        <input type="text" name="hash_tag" id="hashtags" placeholder="#addhashtags" required>
+                          </div>
+                                    <div class="option image-input" onclick="openImageDialog()">
+                                        <div class="icon">
+                                            <img src="{% static 'img/img/icons/photos.svg' %}" alt="">
+                                        </div>
+                                        <span id="imagebtn">add group icon
+                                            <input id="file" type="file" accept="image/*" style="display: none;"  name="groupimage" required>
+                                        </span>
+                                    </div>
+                                    <button type="submit" class="post-btn">create group</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ends -->
+        </div>
+<!-- ends -->
+{% endblock %}
